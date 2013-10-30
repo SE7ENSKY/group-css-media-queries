@@ -1,0 +1,32 @@
+{
+  "name": "group-css-media-queries",
+  "description": "CSS postprocessing: group media queries. Useful for postprocessing preprocessed CSS files :)",
+  "keywords": [ "css", "group", "media", "queries", "postprocessing", "postprocessor" ],
+  "license": "MIT",
+  "author": {
+    "name": "Ivan Kravchenko",
+    "email": "i@se7ensky.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Se7enSky/group-css-media-queries.git"
+  },
+  "version": "1.0.0",
+  "main": "index",
+  "bin": {
+  	"group-css-media-queries": "./bin/group-css-media-queries"
+  },
+  "dependencies": {
+    "css-parse": "*",
+    "css-stringify": "*"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "devDependencies": {
+  	"coffee-script": "*"
+  },
+  "scripts": {
+  	"prepublish": "./node_modules/.bin/coffee -c index.coffee"
+  }
+}
