@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 
-var main = require(__dirname + '/../');
-
+var path = require('path');
+var main = require(path.join(path.dirname(fs.realpathSync(__filename)), '../'));
 
 var input = function(cb) {
 	var inputFilename = process.argv[2];
