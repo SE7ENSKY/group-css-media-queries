@@ -21,7 +21,8 @@
     "css-stringify": "*",
     "optimist": "*",
     "slugify": "*",
-    "colors": "*"
+    "colors": "*",
+    "mkdirp": "*"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -29,12 +29,5 @@ module.exports = (css, split) ->
 		stringify parsed
 	# or send array
 	else
-		# res = []
-		res = [rootRules]
-		res.push 
-	
-		for rule in mediaRules
-			res.push rule
-
-		res
+		[rootRules].concat mediaRules
 		

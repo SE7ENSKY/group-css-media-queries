@@ -7,7 +7,7 @@
   stringify = require('css-stringify');
 
   module.exports = function(css, split) {
-    var media, mediaRules, medias, parsed, res, rootRules, rule, rules, _i, _j, _len, _len1, _ref;
+    var media, mediaRules, medias, parsed, rootRules, rule, rules, _i, _len, _ref;
     parsed = parse(css);
     medias = {};
     rootRules = [];
@@ -35,13 +35,7 @@
     if (!split) {
       return stringify(parsed);
     } else {
-      res = [rootRules];
-      res.push;
-      for (_j = 0, _len1 = mediaRules.length; _j < _len1; _j++) {
-        rule = mediaRules[_j];
-        res.push(rule);
-      }
-      return res;
+      return [rootRules].concat(mediaRules);
     }
   };
 
