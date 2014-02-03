@@ -1,39 +1,117 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
+var fs        = require('fs');
+var path      = require('path');
+var main      = require(path.join(path.dirname(fs.realpathSync(__filename)), '../'));
+var argv      = require('optimist').argv;
+var slugify   = require('slugify');
+var stringify = require('css-stringify');
+var colors    = require('colors');
 
-var path = require('path');
-var main = require(path.join(path.dirname(fs.realpathSync(__filename)), '../'));
+// Help message
+var help = 
+ "Usage:\n"
++"  group-css-media-queries [options] [input_file] [output_file]\n\n"
++"Options:\n"
++"  -s, --split    split output in pultiple files\n"
++"  -d, --dir      output files to this directory\n"
++"  -h, --help     display this message"
+;
+
+// Display help ?
+if ( argv.h || argv.help ) {
+    console.log(help);
+    process.exit(0);
+}
+
+// No input file provided ?
+if ( !argv.s && !argv.split && !argv._.length ) {
+    console.log("Error: no input file provided")
+    console.log(help);
+    process.exit(0);
+}
+
+// Util : returns base name of a path (without extention or path)
+var baseName = function (str) {
+    var base = new String(str).substring(str.lastIndexOf('/') + 1); 
+    if(base.lastIndexOf(".") != -1)       
+        base = base.substring(0, base.lastIndexOf("."));
+    return base;
+}
 
 var input = function(cb) {
-	var inputFilename = process.argv[2];
-	if (inputFilename) {
-		cb(fs.readFileSync(inputFilename, "utf8"));
-	} else {
-		var data = "";
-		process.stdin.resume();
-		process.stdin.setEncoding('utf8');
+    var inputFilename = argv.s || argv.split || argv._[0];
+    if (inputFilename) {
+        cb(fs.readFileSync(inputFilename, "utf8"));
+    } else {
+        var data = "";
+        process.stdin.resume();
+        process.stdin.setEncoding('utf8');
 
-		process.stdin.on('data', function(chunk) {
-			data += chunk;
-		});
+        process.stdin.on('data', function(chunk) {
+            data += chunk;
+        });
 
-		process.stdin.on('end', function() {
-			cb(data);
-		});
-	}
+        process.stdin.on('end', function() {
+            cb(data);
+        });
+    }
 };
 
 var output = function(data) {
-	var outputFilename = process.argv[3];
-	if (outputFilename) {
-		fs.writeFileSync(outputFilename, data);
-	} else {
-		console.log(data);
-	}
+    
+    if (argv.s || argv.split){
+        var inputFilename = argv.s || argv.split || argv._[0];
+        var outputBaseName = baseName(inputFilename);
+        var outputDir = argv.d || argv.dir || (outputBaseName + "-splitted");
+
+        fs.mkdir(outputDir, function(err){
+            if (err) throw err;
+        });
+
+        var outputName, rules, sheet;
+
+        // Loop on each media group rules.
+        // [0] => root rules
+        for(var i=0; i<data.length; i++){
+            // Root rules
+            if (i == 0){
+                outputName = outputBaseName + "-root.css";
+                rules = data[i];
+            }
+            // Other media rules
+            else{
+                outputName = data[i].media.replace(/:\s+/g, "-");
+                outputName = outputBaseName + "-" + slugify(outputName) + ".css";
+                rules = [data[i]];
+            }
+            outputName = outputDir + '/' + outputName;
+
+            console.log ("Creating " + outputName.green);
+            sheet = {
+                type: 'stylesheet',
+                stylesheet: {
+                    rules: rules
+                }
+            }
+            // Write css file
+            fs.writeFileSync(outputName, stringify(sheet));
+
+        }
+    }
+    else{
+        var outputFilename = argv._[1];
+        if (outputFilename) {
+            fs.writeFileSync(outputFilename, data);
+        } else {
+            console.log(data);
+        }
+
+    }
 };
 
+// Do the work
 input(function(data) {
-	result = main(data);
-	output(result);
+    result = main(data, argv.s || argv.split);
+    output(result);
 });
