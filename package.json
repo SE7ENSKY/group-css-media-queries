@@ -18,7 +18,11 @@
   },
   "dependencies": {
     "css-parse": "*",
-    "css-stringify": "*"
+    "css-stringify": "*",
+    "optimist": "*",
+    "slugify": "*",
+    "colors": "*",
+    "mkdirp": "*"
   },
   "engines": {
     "node": ">=0.8.0"

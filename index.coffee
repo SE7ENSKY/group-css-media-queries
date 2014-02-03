@@ -2,7 +2,7 @@
 parse = require 'css-parse'
 stringify = require 'css-stringify'
 
-module.exports = (css) ->
+module.exports = (css, split) ->
 	# parse it
 	parsed = parse css
 
@@ -24,8 +24,10 @@ module.exports = (css) ->
 			media: media
 			rules: rules
 
-	# modify parsed AST
-	parsed.stylesheet.rules = rootRules.concat mediaRules
-
 	# output
-	stringify parsed
+	if not split
+		stringify parsed
+	# or send array
+	else
+		[rootRules].concat mediaRules
+		
