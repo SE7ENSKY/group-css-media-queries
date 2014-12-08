@@ -19,10 +19,23 @@ module.exports = (css) ->
 	# generate media rules
 	mediaRules = []
 	for media, rules of medias
+		# get possible min-width value, for later sorting
+		match = media.match(/\(min-width: ([0-9]*)px\)/)
+		valueMQ = match[1] if (match and match[1])
+
 		mediaRules.push
 			type: "media"
 			media: media
 			rules: rules
+			mqValue: valueMQ
+
+	# sort Media Rules array by min-width
+	mediaRules.sort (a, b) -> (
+		if a.mqValue and b.mqValue # only if there's min-width on both MQs
+			a.mqValue - b.mqValue
+		else # if there's no min-width on these MQs
+			0 # don't sort — leave as equal
+	)
 
 	# modify parsed AST
 	parsed.stylesheet.rules = rootRules.concat mediaRules
