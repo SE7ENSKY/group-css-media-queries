@@ -70,3 +70,16 @@ Voila!
 ```
 npm install -g group-css-media-queries
 ```
+
+# Media Queries order
+Output CSS is ordered by these rules:
+* non-media-query code goes first unmodified,
+* then all only min-width rules, sorted ascending by px
+* then all only max-width rules, sorted descending by px
+* then all interval rules, without reordering
+* then all other rules
+
+# Changelog
+* 1.1.0 - adopted unit tests, refactored media queries ordering
+* 1.0.1 – added basic media queries sorting (thanks to @berbaquero)
+* 1.0.0 – initial working release
