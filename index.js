@@ -33,13 +33,13 @@
         rules: rules
       };
       if (media.indexOf("min-width") !== -1) {
-        m = media.match(/min-width:\s*([1-9][0-9]*)px/);
+        m = media.match(/min-width:\s*([1-9][0-9]*)(px|em)/);
         if (m && m[1]) {
           rule.minWidth = parseInt(m[1]);
         }
       }
       if (media.indexOf("max-width") !== -1) {
-        m = media.match(/max-width:\s*([1-9][0-9]*)px/);
+        m = media.match(/max-width:\s*([1-9][0-9]*)(px|em)/);
         if (m && m[1]) {
           rule.maxWidth = parseInt(m[1]);
         }

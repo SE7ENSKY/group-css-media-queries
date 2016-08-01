@@ -15,6 +15,6 @@ describe 'groupCssMediaQueries', ->
 			outputFilename = inputFilename.replace ///\.css$///, '.sorted.css'
 			input = fs.readFileSync "#{fixturesPath}/#{inputFilename}", encoding: "utf8"
 			output = fs.readFileSync "#{fixturesPath}/#{outputFilename}", encoding: "utf8"
-			groupCssMediaQueries(input).should.eql(output)
+			groupCssMediaQueries(input.trim()).should.eql(output.trim())
 
 	testInputFile inputFilename for inputFilename in inputFiles
