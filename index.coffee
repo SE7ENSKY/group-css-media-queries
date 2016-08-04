@@ -25,11 +25,11 @@ module.exports = (css) ->
 			rules: rules
 		# extract min-width and max-width values
 		if media.indexOf("min-width") isnt -1
-			m = media.match ///min-width:\s*([1-9][0-9]*)(px|em)?///
+			m = media.match ///min-width:\s*(\d+)(px|em)?///
 			rule.minWidth = parseInt m[1] if m && m[1]
 			rule.unit = m[2] if m[2]
 		if media.indexOf("max-width") isnt -1
-			m = media.match ///max-width:\s*([1-9][0-9]*)(px|em)?///
+			m = media.match ///max-width:\s*(\d+)(px|em)?///
 			rule.maxWidth = parseInt m[1] if m && m[1]
 			rule.unit = m[2] if m[2]
 		mediaRules.push rule
