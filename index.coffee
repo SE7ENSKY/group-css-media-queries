@@ -25,11 +25,13 @@ module.exports = (css) ->
 			rules: rules
 		# extract min-width and max-width values
 		if media.indexOf("min-width") isnt -1
-			m = media.match ///min-width:\s*([1-9][0-9]*)(px|em)///
+			m = media.match ///min-width:\s*([1-9][0-9]*)(px|em)?///
 			rule.minWidth = parseInt m[1] if m && m[1]
+			rule.unit = m[2] if m[2]
 		if media.indexOf("max-width") isnt -1
-			m = media.match ///max-width:\s*([1-9][0-9]*)(px|em)///
+			m = media.match ///max-width:\s*([1-9][0-9]*)(px|em)?///
 			rule.maxWidth = parseInt m[1] if m && m[1]
+			rule.unit = m[2] if m[2]
 		mediaRules.push rule
 
 	# break rules into only-min, only-max, intervals and others
@@ -42,9 +44,21 @@ module.exports = (css) ->
 	otherRules = mediaRules.filter (rule) ->
 		rule not in onlyMinRules.concat(onlyMaxRules).concat(intervalRules)
 
+	emToPxRatio = 16 # 1em = 16px
+
 	# sort media rules
-	onlyMinRules.sort (a, b) -> a.minWidth - b.minWidth # ascending
-	onlyMaxRules.sort (a, b) -> b.maxWidth - a.maxWidth # descending
+	onlyMinRules.sort (a, b) ->
+		aPxValue = a.minWidth
+		bPxValue = b.minWidth
+		aPxValue *= emToPxRatio if a.unit is 'em'
+		bPxValue *= emToPxRatio if b.unit is 'em'
+		aPxValue - bPxValue # ascending
+	onlyMaxRules.sort (a, b) ->
+		aPxValue = a.maxWidth
+		bPxValue = b.maxWidth
+		aPxValue *= emToPxRatio if a.unit is 'em'
+		bPxValue *= emToPxRatio if b.unit is 'em'
+		bPxValue - aPxValue # descending
 
 	# modify parsed AST
 	parsed.stylesheet.rules = rootRules

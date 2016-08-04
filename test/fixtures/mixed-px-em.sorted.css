@@ -41,3 +41,21 @@
     property: value4;
   }
 }
+
+@media (max-width: 20em) {
+  .selector3 {
+    property: value1;
+  }
+}
+
+@media (max-width: 165px) {
+  .selector3 {
+    property: value3;
+  }
+}
+
+@media (max-width: 10em) {
+  .selector3 {
+    property: value2;
+  }
+}
