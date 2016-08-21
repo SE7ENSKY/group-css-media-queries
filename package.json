@@ -24,8 +24,8 @@
     "group-css-media-queries": "./bin/group-css-media-queries"
   },
   "dependencies": {
-    "css-parse": "*",
-    "css-stringify": "*"
+    "css-parse": "^2.0.0",
+    "css-stringify": "^2.0.0"
   },
   "engines": {
     "node": ">=0.8.0"
