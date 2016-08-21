@@ -36,11 +36,11 @@ module.exports = (css) ->
 
 	# break rules into only-min, only-max, intervals and others
 	onlyMinRules = mediaRules.filter (rule) ->
-		rule.minWidth and not rule.maxWidth
+		rule.minWidth? and not rule.maxWidth?
 	onlyMaxRules = mediaRules.filter (rule) ->
-		rule.maxWidth and not rule.minWidth
+		rule.maxWidth? and not rule.minWidth?
 	intervalRules = mediaRules.filter (rule) ->
-		rule.minWidth and rule.maxWidth
+		rule.minWidth? and rule.maxWidth?
 	otherRules = mediaRules.filter (rule) ->
 		rule not in onlyMinRules.concat(onlyMaxRules).concat(intervalRules)
 

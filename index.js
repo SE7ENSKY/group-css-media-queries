@@ -53,13 +53,13 @@
       mediaRules.push(rule);
     }
     onlyMinRules = mediaRules.filter(function(rule) {
-      return rule.minWidth && !rule.maxWidth;
+      return (rule.minWidth != null) && (rule.maxWidth == null);
     });
     onlyMaxRules = mediaRules.filter(function(rule) {
-      return rule.maxWidth && !rule.minWidth;
+      return (rule.maxWidth != null) && (rule.minWidth == null);
     });
     intervalRules = mediaRules.filter(function(rule) {
-      return rule.minWidth && rule.maxWidth;
+      return (rule.minWidth != null) && (rule.maxWidth != null);
     });
     otherRules = mediaRules.filter(function(rule) {
       return indexOf.call(onlyMinRules.concat(onlyMaxRules).concat(intervalRules), rule) < 0;
