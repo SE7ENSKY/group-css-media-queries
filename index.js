@@ -33,18 +33,18 @@
         rules: rules
       };
       if (media.indexOf("min-width") !== -1) {
-        m = media.match(/min-width:\s*(\d+)(px|em)?/);
+        m = media.match(/min-width:\s*(\d+(?:\.\d*)?)(px|em)?/);
         if (m && m[1]) {
-          rule.minWidth = parseInt(m[1]);
+          rule.minWidth = parseFloat(m[1]);
         }
         if (m[2]) {
           rule.unit = m[2];
         }
       }
       if (media.indexOf("max-width") !== -1) {
-        m = media.match(/max-width:\s*(\d+)(px|em)?/);
+        m = media.match(/max-width:\s*(\d+(?:\.\d*)?)(px|em)?/);
         if (m && m[1]) {
-          rule.maxWidth = parseInt(m[1]);
+          rule.maxWidth = parseFloat(m[1]);
         }
         if (m[2]) {
           rule.unit = m[2];
