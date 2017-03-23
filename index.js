@@ -8,7 +8,7 @@
   stringifyCss = require('css-stringify');
 
   module.exports = function(css) {
-    var emToPxRatio, i, intervalRules, len, m, media, mediaRules, medias, onlyMaxRules, onlyMinRules, otherRules, parsed, ref, rootRules, rule, rules;
+    var combinedRules, emToPxRatio, i, intervalRules, len, m, media, mediaRules, medias, onlyMaxRules, onlyMinRules, otherRules, parsed, ref, rootRules, rule, rules;
     parsed = parseCss(css);
     medias = {};
     rootRules = [];
@@ -50,16 +50,37 @@
           rule.unit = m[2];
         }
       }
+      if (media.indexOf("min-height") !== -1) {
+        m = media.match(/min-height:\s*(\d+)(px|em)?/);
+        if (m && m[1]) {
+          rule.minHeight = parseInt(m[1]);
+        }
+        if (m[2]) {
+          rule.unit = m[2];
+        }
+      }
+      if (media.indexOf("max-height") !== -1) {
+        m = media.match(/max-height:\s*(\d+)(px|em)?/);
+        if (m && m[1]) {
+          rule.maxHeight = parseInt(m[1]);
+        }
+        if (m[2]) {
+          rule.unit = m[2];
+        }
+      }
       mediaRules.push(rule);
     }
     onlyMinRules = mediaRules.filter(function(rule) {
-      return (rule.minWidth != null) && (rule.maxWidth == null);
+      return (rule.minWidth != null) && (rule.maxWidth == null) && (rule.minHeight == null) && (rule.maxHeight == null);
     });
     onlyMaxRules = mediaRules.filter(function(rule) {
-      return (rule.maxWidth != null) && (rule.minWidth == null);
+      return (rule.maxWidth != null) && (rule.minWidth == null) && (rule.minHeight == null) && (rule.maxHeight == null);
     });
     intervalRules = mediaRules.filter(function(rule) {
-      return (rule.minWidth != null) && (rule.maxWidth != null);
+      return (rule.minWidth != null) && (rule.maxWidth != null) && (rule.minHeight == null) && (rule.maxHeight == null);
+    });
+    combinedRules = mediaRules.filter(function(rule) {
+      return (rule.minHeight != null) || (rule.maxHeight != null);
     });
     otherRules = mediaRules.filter(function(rule) {
       return indexOf.call(onlyMinRules.concat(onlyMaxRules).concat(intervalRules), rule) < 0;
@@ -89,7 +110,7 @@
       }
       return bPxValue - aPxValue;
     });
-    parsed.stylesheet.rules = rootRules.concat(onlyMinRules).concat(onlyMaxRules).concat(intervalRules).concat(otherRules);
+    parsed.stylesheet.rules = rootRules.concat(onlyMinRules).concat(onlyMaxRules).concat(intervalRules).concat(combinedRules).concat(otherRules);
     return stringifyCss(parsed);
   };
 
